@@ -1,31 +1,24 @@
 import React from 'react';
 import './App.css';
 import LedgerList from "./ledger-list/ledger-list";
+import Header from "./header/header";
+import {BrowserRouter, Route} from "react-router-dom";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <main>
-        <LedgerList />
-      </main>
-      <footer>
-
-      </footer>
-    </div>
-  );
+    return (
+        <BrowserRouter>
+            <div className="App">
+                <Header/>
+                <main>
+                    <Route path={"/"}>
+                        <h1>Hello</h1>
+                    </Route>
+                    <Route path={"/ledgers"} component={LedgerList}/>
+                </main>
+            </div>
+        </BrowserRouter>
+    );
 }
 
 export default App;

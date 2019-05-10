@@ -1,0 +1,13 @@
+.app-bar {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.app-title {
+    flex-grow: 1;
+    align-self: center;
+}
+
+.header-logo {
+    width: 8vw;
+}
