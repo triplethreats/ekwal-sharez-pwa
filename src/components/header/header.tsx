@@ -22,7 +22,7 @@ export default class Header extends React.Component<any, State> {
     render() {
         const {anchorEl} = this.state;
         return (
-            <AppBar className={"app-bar"}>
+            <AppBar position={"fixed"} className={`app-bar ${this.props.className}`}>
                 <img className={"header-logo"} src={"/favicon.png"} alt={"Logo"}/>
                 <Typography className={"app-title"} variant={"h6"}>
                     EkwalSharez
