@@ -3,6 +3,7 @@ import './ledger-view.css';
 import TransactionList from "../transaction-list/transaction-list";
 import {Ledger} from "../../domain/ledger";
 import {RouteComponentProps} from "react-router";
+import {Typography} from "@material-ui/core";
 
 interface Props {
     ledger: Ledger
@@ -39,7 +40,7 @@ export default class LedgerView extends React.Component<RouteComponentProps, Pro
     render() {
         return (
             <div>
-                <h2>{this.state.ledger.title}</h2>
+                <Typography variant={"h2"} style={{textAlign: "center"}}>{this.state.ledger.title}</Typography>
                 <TransactionList transactions={this.state.ledger.transactions} />
             </div>
         );

@@ -13,3 +13,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.link-item {
+  border-bottom: rgba(200, 200, 200, 0.4) 1px solid !important;
+}

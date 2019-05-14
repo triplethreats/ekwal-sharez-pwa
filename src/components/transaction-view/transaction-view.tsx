@@ -9,7 +9,7 @@ const TransactionView: React.FunctionComponent<{
         <Grid container direction={"row"}>
             <Grid item container xs={6} direction={"column"} style={{textAlign: "start"}}>
                 <Grid item xs>
-                    <Typography variant={"h6"}>{props.transaction.name}</Typography>
+                    <Typography variant={"h6"} color={"primary"}>{props.transaction.name}</Typography>
                 </Grid>
                 <Grid item xs>
                     <Typography inline={true} variant={"subtitle1"}>Paid by <Typography inline={true} variant={"subtitle2"}>{props.transaction.payments[0].user.name}</Typography></Typography>
@@ -18,7 +18,7 @@ const TransactionView: React.FunctionComponent<{
             </Grid>
             <Grid item container xs={6} direction={"column"} style={{textAlign: "end"}}>
                 <Grid item xs>
-                    <Typography variant={"h6"}>{props.transaction.total}€</Typography>
+                    <Typography variant={"h6"} color={"primary"}>{props.transaction.total}€</Typography>
                 </Grid>
                 <Grid item xs>{props.transaction.date.toDateString()}</Grid>
                 <Grid item xs/>
