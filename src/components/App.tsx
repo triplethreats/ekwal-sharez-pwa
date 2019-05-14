@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import LedgerList from "./ledger-list/ledger-list";
 import Header from "./header/header";
-import {Route, BrowserRouter, Switch} from "react-router-dom";
+import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
 
 const headerHeight = "8vh";
@@ -11,7 +11,8 @@ const contentMargins = "20vw";
 
 const styles = (theme: Theme) => createStyles({
     header: {
-        height: headerHeight
+        height: headerHeight,
+        lineHeight: headerHeight
     },
     main: {
         [theme.breakpoints.up('sm')]: {
@@ -39,6 +40,7 @@ function App(props: Props) {
                 <main className={classes.main}>
                     <Switch>
                         <Route path={"/ledgers"} component={LedgerList}/>
+                        <Redirect to={"/ledgers"} from={"/"}/>
                         <Route render={props1 => (<h2>404 Not found</h2>)}/>
                     </Switch>
                 </main>
