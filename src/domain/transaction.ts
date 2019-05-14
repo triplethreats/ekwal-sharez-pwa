@@ -4,4 +4,5 @@ export interface Transaction {
     name: string;
     payments: TransactionPayment[];
     total: number;
+    date: Date;
 }

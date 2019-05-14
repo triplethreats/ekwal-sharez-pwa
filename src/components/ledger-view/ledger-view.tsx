@@ -13,10 +13,10 @@ const ledgers: Ledger[] = [
         title: "Amsterdam",
         description: "Trip to Amsterdam",
         transactions: [
-            {total: 50, payments: [
+            {total: 50, date: new Date(Date.now()), payments: [
                     {amount: 50, user: {name: 'Rafael'}}
                 ], name: 'Chipsy King'},
-            {total: 60, payments:[
+            {total: 60, date: new Date(Date.now()), payments:[
                     {amount: 60, user: {name: 'Rafael'}}
                 ], name: 'Sweetness'}],
         users: [{name: 'Rafael'}, {name: 'Arthur'}, {name: 'Kevin'}]
