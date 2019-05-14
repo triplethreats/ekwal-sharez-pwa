@@ -2,6 +2,8 @@ import * as React from "react";
 import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from "@material-ui/core";
 import {MoreVert} from '@material-ui/icons';
 import './header.css'
+import {Link} from "react-router-dom";
+import logo from "../../../public/favicon.png";
 
 interface State {
     anchorEl: null | HTMLElement;
@@ -23,7 +25,9 @@ export default class Header extends React.Component<any, State> {
         const {anchorEl} = this.state;
         return (
             <AppBar position={"fixed"} className={`app-bar ${this.props.className}`}>
-                <img className={"header-logo"} src={"/favicon.png"} alt={"Logo"}/>
+                <Link to={"/"}>
+                    <img className={"header-logo"} src={logo} alt={"Logo"}/>
+                </Link>
                 <Typography className={"app-title"} variant={"h6"}>
                     EkwalSharez
                 </Typography>
