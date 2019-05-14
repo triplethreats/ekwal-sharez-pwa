@@ -5,6 +5,7 @@ import Header from "./header/header";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
 import LedgerView from "./ledger-view/ledger-view";
+import TransactionEdit from "./transaction-edit/transaction-edit";
 
 const headerHeight = "8vh";
 const footerHeight = "4vh";
@@ -42,6 +43,7 @@ function App(props: Props) {
                     <Switch>
                         <Route path={"/ledgers"} component={LedgerList}/>
                         <Route path={"/ledger/:id"} component={LedgerView} />
+                        <Route path={"/transaction/:id"} component={TransactionEdit} />
                         <Redirect to={"/ledgers"} from={"/"} exact={true} strict={true}/>
                         <Route render={props1 => (<h2>404 Not found</h2>)}/>
                     </Switch>
