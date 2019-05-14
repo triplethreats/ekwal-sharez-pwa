@@ -11,6 +11,7 @@ interface Props {
 const ledgers: Ledger[] = [
     {
         title: "Amsterdam",
+        description: "Trip to Amsterdam",
         transactions: [
             {total: 50, payments: [
                     {amount: 50, user: {name: 'Rafael'}}
@@ -22,12 +23,16 @@ const ledgers: Ledger[] = [
     }
 ];
 
+interface MatchParams {
+    id: number;
+}
+
 export default class LedgerView extends React.Component<RouteComponentProps, Props> {
 
     state: Props = {} as Props;
 
     componentWillMount(): void {
-        const {id} = this.props.match.params;
+        const {id} = this.props.match.params as {id: number};
         this.setState({ledger: ledgers[id]});
     }
 

@@ -4,5 +4,6 @@ import {LedgerUser} from "./ledger-user";
 export interface Ledger {
     transactions: Transaction[],
     users: LedgerUser[],
-    title: string
+    title: string,
+    description: string
 }
