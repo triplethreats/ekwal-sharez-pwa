@@ -2,6 +2,7 @@ import * as React from "react";
 import './ledger-list.css'
 import {Ledger} from "../../domain/ledger";
 import {List, ListItem} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 const ledgers: Ledger[] = [
     {
@@ -23,7 +24,7 @@ export default class LedgerList extends React.Component{
         return (
             <List component="nav">
                 {ledgers.map((value, index) => {
-                    return <ListItem key={index} button href={`/ledger/${index}`} component="a" className={"link-item"}>
+                    return <ListItem key={index} button component={props => <Link to={`/ledger/${index}`} {...props} />} className={"link-item"}>
                         <h2>{value.title}</h2>
                         <p>{value.description}</p>
                     </ListItem>
