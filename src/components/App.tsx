@@ -4,6 +4,7 @@ import LedgerList from "./ledger-list/ledger-list";
 import Header from "./header/header";
 import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
+import LedgerView from "./ledger-view/ledger-view";
 
 const headerHeight = "8vh";
 const footerHeight = "4vh";
@@ -40,7 +41,8 @@ function App(props: Props) {
                 <main className={classes.main}>
                     <Switch>
                         <Route path={"/ledgers"} component={LedgerList}/>
-                        <Redirect to={"/ledgers"} from={"/"}/>
+                        <Route path={"/ledger/:id"} component={LedgerView} />
+                        <Redirect to={"/ledgers"} from={"/"} exact={true} strict={true}/>
                         <Route render={props1 => (<h2>404 Not found</h2>)}/>
                     </Switch>
                 </main>
