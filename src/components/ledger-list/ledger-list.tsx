@@ -1,8 +1,9 @@
 import * as React from "react";
 import './ledger-list.css'
 import {Ledger} from "../../domain/ledger";
-import {Grid, List, ListItem, Typography} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import Link from "react-router-dom/Link";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 
 const ledgers: Ledger[] = [
     {

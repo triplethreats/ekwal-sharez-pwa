@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Transaction} from "../../domain/transaction";
-import {Grid, Typography} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
 
 const TransactionView: React.FunctionComponent<{
     transaction: Transaction

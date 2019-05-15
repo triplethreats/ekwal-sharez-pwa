@@ -1,9 +1,14 @@
 import * as React from "react";
-import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from "@material-ui/core";
-import {MoreVert} from '@material-ui/icons';
 import './header.css'
-import {Link} from "react-router-dom";
 import logo from "../../../public/favicon.png";
+import Link from "react-router-dom/Link";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MoreVert from "@material-ui/icons/MoreVert";
+import MenuItem from "@material-ui/core/MenuItem";
+import AppBar from "@material-ui/core/AppBar";
 
 interface State {
     anchorEl: null | HTMLElement;
