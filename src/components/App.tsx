@@ -2,10 +2,13 @@ import React from 'react';
 import './App.css';
 import LedgerList from "./ledger-list/ledger-list";
 import Header from "./header/header";
-import {Route, BrowserRouter, Switch, Redirect} from "react-router-dom";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
 import LedgerView from "./ledger-view/ledger-view";
 import TransactionEdit from "./transaction-edit/transaction-edit";
+import BrowserRouter from "react-router-dom/BrowserRouter";
+import Route from "react-router-dom/Route";
+import Switch from "react-router-dom/Switch";
+import Redirect from "react-router-dom/Redirect";
 
 const headerHeight = "8vh";
 const footerHeight = "4vh";

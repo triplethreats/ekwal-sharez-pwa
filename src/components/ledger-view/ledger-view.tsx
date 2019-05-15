@@ -3,7 +3,7 @@ import './ledger-view.css';
 import TransactionList from "../transaction-list/transaction-list";
 import {Ledger} from "../../domain/ledger";
 import {Redirect, RouteComponentProps} from "react-router";
-import {Typography} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 interface Props {
     ledger: Ledger
