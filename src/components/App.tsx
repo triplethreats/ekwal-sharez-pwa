@@ -41,9 +41,9 @@ function App(props: Props) {
                 <Header className={classes.header}/>
                 <main className={classes.main}>
                     <Switch>
+                        <Route path={"/ledger/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
                         <Route path={"/ledgers"} component={LedgerList}/>
                         <Route path={"/ledger/:id"} component={LedgerView} />
-                        <Route path={"/transaction/:id"} component={TransactionEdit} />
                         <Redirect to={"/ledgers"} from={"/"} exact={true} strict={true}/>
                         <Route render={props1 => (<h2>404 Not found</h2>)}/>
                     </Switch>

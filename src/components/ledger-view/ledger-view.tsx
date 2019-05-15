@@ -2,7 +2,7 @@ import * as React from 'react';
 import './ledger-view.css';
 import TransactionList from "../transaction-list/transaction-list";
 import {Ledger} from "../../domain/ledger";
-import {RouteComponentProps} from "react-router";
+import {Redirect, RouteComponentProps} from "react-router";
 import {Typography} from "@material-ui/core";
 
 interface Props {
@@ -11,16 +11,17 @@ interface Props {
 
 const ledgers: Ledger[] = [
     {
+        id: 0,
         title: "Amsterdam",
         description: "Trip to Amsterdam",
         transactions: [
-            {total: 50, date: new Date(Date.now()), payments: [
-                    {amount: 50, user: {name: 'Rafael'}}
+            {id:0,total: 50, date: new Date(Date.now()), payments: [
+                    {id:0,amount: 50, user: {id:0,name: 'Rafael'}}
                 ], name: 'Chipsy King'},
-            {total: 60, date: new Date(Date.now()), payments:[
-                    {amount: 60, user: {name: 'Rafael'}}
+            {id:1,total: 60, date: new Date(Date.now()), payments:[
+                    {id:1,amount: 60, user: {id:0,name: 'Rafael'}}
                 ], name: 'Sweetness'}],
-        users: [{name: 'Rafael'}, {name: 'Arthur'}, {name: 'Kevin'}]
+        users: [{id:0,name: 'Rafael'}, {id:1,name: 'Arthur'}, {id:2,name: 'Kevin'}]
     }
 ];
 
@@ -33,16 +34,23 @@ export default class LedgerView extends React.Component<RouteComponentProps, Pro
     state: Props = {} as Props;
 
     componentWillMount(): void {
-        const {id} = this.props.match.params as {id: number};
-        this.setState({ledger: ledgers[id]});
+        const {id} = this.props.match.params as MatchParams;
+        const ledger = ledgers.find((ledger)=>{return (parseInt(ledger.id.toString())) === (parseInt(id.toString()))});
+        if(ledger !== null && ledger !== undefined){
+            this.setState({ledger: ledger});
+        }
     }
 
-    render() {
-        return (
-            <div>
-                <Typography variant={"h2"} style={{textAlign: "center"}}>{this.state.ledger.title}</Typography>
-                <TransactionList transactions={this.state.ledger.transactions} />
-            </div>
-        );
+    render(){
+        if(this.state.ledger === null || this.state.ledger === undefined){
+            return <Redirect to='/'/>;
+        }else {
+            return (
+                <div>
+                    <Typography variant={"h2"} style={{textAlign: "center"}}>{this.state.ledger.title}</Typography>
+                    <TransactionList transactions={this.state.ledger.transactions} ledger={this.state.ledger}/>
+                </div>
+            );
+        }
     }
 };
