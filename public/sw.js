@@ -32,6 +32,14 @@ self.addEventListener('activate', event => {
 
 const queue = new workbox.backgroundSync.Queue('ledgers');
 
+function getLedgerFromLedgers(globalCachedResponse, ledgerId) {
+    return globalCachedResponse.json().then(ledgers => {
+        const ledger = ledgers.find(ledger => ledger.id === parseInt(ledgerId));
+        const responseBuffer = new Blob([JSON.stringify(ledger)], {type: "text/json"});
+        return new Response(responseBuffer, {statusText: "OK", status: 200, headers: []});
+    });
+}
+
 function getFromCache(evt) {
     return () => {
         return caches.match(evt.request).then((cachedResponse) => {
@@ -44,15 +52,17 @@ function getFromCache(evt) {
                 return caches
                     .match(new Request("/api/ledgers", {method: "GET"}))
                     .then(globalCachedResponse => {
+                        console.log(url.pathname.match(/\/api\/ledgers\/(?<id>[0-9]+)\/.*/i).groups.id);
+                        const ledgerId = /\/api\/ledgers\/(?<id>[0-9]+)\/.*/i.exec(url.pathname).groups.id;
                         if (!cachedResponse && globalCachedResponse) {
                             console.log("Global response");
-                            return globalCachedResponse;
+                            return getLedgerFromLedgers(globalCachedResponse, ledgerId);
                         } else {
                             const cachedDate = new Date(cachedResponse.headers.get("date"));
                             const globalCachedDate = new Date(globalCachedResponse.headers.get("date"));
                             if (globalCachedDate.getTime() > cachedDate.getTime()) {
                                 console.log("Global response");
-                                return globalCachedResponse;
+                                return getLedgerFromLedgers(globalCachedResponse, ledgerId);
                             } else {
                                 console.log("Response");
                                 return cachedResponse;
@@ -67,18 +77,15 @@ function getFromCache(evt) {
 self.addEventListener("fetch", evt => {
     console.log("Fetch", evt.request.url);
     if (evt.request.method === "POST") {
-        console.log("Posting data");
         const promiseChain = fetch(evt.request.clone());
         promiseChain.catch(() => {
             return queue.pushRequest({request: evt.request});
         });
         evt.respondWith(promiseChain);
     } else {
-        console.log("Getting data");
         const response = fetch(evt.request.clone()).then((response) => {
             if (response.ok) {
                 return caches.open(APICACHE).then(cache => {
-
                     cache.put(evt.request.clone(), response.clone());
                     return response;
                 });
@@ -87,18 +94,5 @@ self.addEventListener("fetch", evt => {
             }
         }).catch(getFromCache(evt));
         evt.respondWith(response);
-        /*evt.respondWith(
-            caches.match(evt.request).then(cachedResponse => {
-                if (cachedResponse) {
-                    return cachedResponse;
-                } else {
-                    return fetch(evt.request).then(response => {
-                        return caches.open(APICACHE).then(cache => {
-                            cache.put(evt.request, response.clone());
-                            return response;
-                        });
-                    });
-                }
-            }));*/
     }
 });
