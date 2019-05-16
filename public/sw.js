@@ -11,24 +11,10 @@
 // opt-in, read https://bit.ly/CRA-PWA
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
-workbox.precaching.precacheAndRoute([]);
-
-workbox.precaching.precacheAndRoute([
-    "/",
-    "https://fonts.googleapis.com/css?family=Roboto:300,400,500",
-    "https://fonts.googleapis.com/icon?family=Material+Icons",
-    "https://fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc4.woff2"]);
-// workbox.routing.registerRoute("/api/", new workbox.strategies.NetworkFirst({ "cacheName":"apiCache","networkTimeoutSeconds":10, plugins: [new workbox.backgroundSync.Plugin("apiQueue", {}), new workbox.cacheableResponse.Plugin({ statuses: [ 0, 200 ] })] }), 'GET');
-
-const APICACHE = "ledgerApi";
+const APICACHE = "ledgerApi2";
 
 self.addEventListener("install", evt => {
     console.log("Installed");
-    /*evt.waitUntil(
-        caches.open("home").then(cache => {
-            return cache.add("/").then(() => self.skipWaiting());
-        })
-    );*/
 });
 
 self.addEventListener('activate', event => {
@@ -46,10 +32,39 @@ self.addEventListener('activate', event => {
 
 const queue = new workbox.backgroundSync.Queue('ledgers');
 
-self.addEventListener("fetch", evt => {
-    if (!evt.request.url.startsWith(self.location.origin)) {
-        return;
+function getFromCache(evt) {
+    return () => {
+        return caches.match(evt.request).then((cachedResponse) => {
+            if (cachedResponse) {
+                console.log("Response", cachedResponse.clone());
+                return cachedResponse;
+            }
+            const url = new URL(evt.request.url);
+            if (url.pathname.startsWith("/api/ledgers")) {
+                return caches
+                    .match(new Request("/api/ledgers", {method: "GET"}))
+                    .then(globalCachedResponse => {
+                        if (!cachedResponse && globalCachedResponse) {
+                            console.log("Global response");
+                            return globalCachedResponse;
+                        } else {
+                            const cachedDate = new Date(cachedResponse.headers.get("date"));
+                            const globalCachedDate = new Date(globalCachedResponse.headers.get("date"));
+                            if (globalCachedDate.getTime() > cachedDate.getTime()) {
+                                console.log("Global response");
+                                return globalCachedResponse;
+                            } else {
+                                console.log("Response");
+                                return cachedResponse;
+                            }
+                        }
+                    });
+            }
+        });
     }
+}
+
+self.addEventListener("fetch", evt => {
     console.log("Fetch", evt.request.url);
     if (evt.request.method === "POST") {
         console.log("Posting data");
@@ -60,17 +75,30 @@ self.addEventListener("fetch", evt => {
         evt.respondWith(promiseChain);
     } else {
         console.log("Getting data");
-        evt.respondWith(
+        const response = fetch(evt.request.clone()).then((response) => {
+            if (response.ok) {
+                return caches.open(APICACHE).then(cache => {
+
+                    cache.put(evt.request.clone(), response.clone());
+                    return response;
+                });
+            } else {
+                return getFromCache(evt)();
+            }
+        }).catch(getFromCache(evt));
+        evt.respondWith(response);
+        /*evt.respondWith(
             caches.match(evt.request).then(cachedResponse => {
                 if (cachedResponse) {
                     return cachedResponse;
                 } else {
-                    return caches.open(APICACHE).then(cache => {
-                        return fetch(evt.request).then(response => {
-                            return cache.put(evt.request, response.clone()).then(() => response);
+                    return fetch(evt.request).then(response => {
+                        return caches.open(APICACHE).then(cache => {
+                            cache.put(evt.request, response.clone());
+                            return response;
                         });
                     });
                 }
-            }));
+            }));*/
     }
 });

@@ -18,14 +18,14 @@ function serializeTransaction(obj: any): Transaction {
 export default class LedgerApi {
     static getLedgers(mail: string): Promise<Ledger[]> {
         return fetch("/api/ledgers")
-            .then(response => response.json()
-                .then((ledgers: Ledger[]) => ledgers.map(serializeLedger)));
+            .then(response => response.json())
+            .then((ledgers: Ledger[]) => ledgers.map(serializeLedger));
     }
 
     static getLedger(mail: string, ledgerId: number): Promise<Ledger> {
         return fetch(`/api/ledgers/${ledgerId}`)
-            .then(response => response.json()
-                .then(serializeLedger));
+            .then(response => response.json())
+            .then(serializeLedger);
     }
 
     static updateLedger(ledgerId: number, updatedLedger: Ledger, newUsers: LedgerUserDraft[]): Promise<void>{
