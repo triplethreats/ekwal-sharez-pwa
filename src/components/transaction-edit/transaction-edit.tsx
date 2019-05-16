@@ -1,14 +1,13 @@
 import * as React from "react";
 import {Transaction} from "../../domain/transaction";
 import TextField from '@material-ui/core/TextField';
-import {Ledger} from "../../domain/ledger";
 import {Redirect, RouteComponentProps} from "react-router";
-import {Typography} from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
-import TransactionList from "../transaction-list/transaction-list";
-import {TransactionPayment} from "../../domain/transaction-payment";
 import {LedgerUser} from "../../domain/ledger-user";
 import LedgerApi from "../../services/ledger-api";
+import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 
 interface State {
     transaction: Transaction
@@ -39,7 +38,11 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
             });
         });
     }
-
+    handleChange = (event: { target: { value: string; }; }) => {
+        let newTransaction = { ...this.state.transaction };
+        newTransaction.payments[0].user.name = event.target.value;
+        this.setState({ transaction: newTransaction });
+    };
     render() {
         if (!this.state.success) {
             return <Redirect to={"/"}/>
@@ -48,41 +51,39 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         } else {
             return (
                 <div>
-                    <TextField
+                    <Grid item xs={12}><TextField
                         label="Name"
                         value={this.state.transaction.name}
                         margin="normal"
-                    />
-                    <TextField
+                    /></Grid>
+                    <Grid item xs={12}><TextField
                         label="Price"
                         value={this.state.transaction.total}
                         margin="normal"
-                    />
-                    <TextField
+                    /></Grid>
+                    <Grid item xs={12}><TextField
                         label="Date"
                         type="date"
                         defaultValue={this.state.transaction.date.toISOString().split('T')[0]}
                         InputLabelProps={{
                             shrink: true,
                         }}
-                    />
-                    <TextField
-                        select
-                        label="Payer"
+                    /></Grid>
+                    <InputLabel htmlFor="age-simple">Payer</InputLabel>
+                    <Grid item xs={12}><Select
                         value={this.state.transaction.payments[0].user.name}
-                        SelectProps={{
-                            native: true,
-                            MenuProps: {},
+                        onChange={this.handleChange}
+                        inputProps={{
+                            name: 'Payer',
+                            id: 'payer-simple',
                         }}
-                        helperText="Please select the payer"
-                        margin="normal"
                     >
                         {this.state.users.map(user => (
-                            <option key={user.name} value={user.name}>
+                            <MenuItem value={user.name}>
                                 {user.name}
-                            </option>
+                            </MenuItem>
                         ))}
-                    </TextField>
+                    </Select></Grid>
                 </div>
             );
         }
