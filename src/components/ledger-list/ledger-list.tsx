@@ -5,6 +5,7 @@ import {Link, RouteComponentProps} from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import LedgerApi from "../../services/ledger-api";
+import {SvgIcon} from "@material-ui/core";
 
 interface State {
     ledgers: Ledger[];
@@ -24,7 +25,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
         return (
             <List component="nav">
                 {this.state.ledgers.map((value, index) => {
-                    return <ListItem key={index} button component={props => <Link to={`/ledger/${index}`} {...props} />} className={"link-item"}>
+                    return <ListItem key={index} button component={props => <Link to={`/ledger/${index}/transactions`} {...props} />} className={"link-item"}>
                         <h2>{value.title}</h2>
                         <p>{value.description}</p>
                     </ListItem>
