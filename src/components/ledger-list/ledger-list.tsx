@@ -24,7 +24,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
         return (
             <List component="nav">
                 {this.state.ledgers.map((value, index) => {
-                    return <ListItem key={index} button component={props => <Link to={`/ledger/${index}/transactions`} {...props} />} className={"link-item"}>
+                    return <ListItem key={index} button component={props => <Link to={`/ledgers/${index}/transactions`} {...props} />} className={"link-item"}>
                         <h2>{value.title}</h2>
                         <p>{value.description}</p>
                     </ListItem>

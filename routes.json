@@ -1,4 +1,4 @@
 {
-  "/ledgers/*": "/index.html",
+  "/ledgers/*": "/",
   "/api/*": "/$1"
 }

@@ -40,6 +40,28 @@ function getLedgerFromLedgers(globalCachedResponse, ledgerId) {
     });
 }
 
+function getAPICache(url, cachedResponse) {
+    return caches
+        .match(new Request("/api/ledgers", {method: "GET"}))
+        .then(globalCachedResponse => {
+            const ledgerId = /\/api\/ledgers\/(?<id>[0-9]+)\/.*/i.exec(url.pathname).groups.id;
+            if (!cachedResponse && globalCachedResponse) {
+                console.log("Global response");
+                return getLedgerFromLedgers(globalCachedResponse, ledgerId);
+            } else {
+                const cachedDate = new Date(cachedResponse.headers.get("date"));
+                const globalCachedDate = new Date(globalCachedResponse.headers.get("date"));
+                if (globalCachedDate.getTime() > cachedDate.getTime()) {
+                    console.log("Global response");
+                    return getLedgerFromLedgers(globalCachedResponse, ledgerId);
+                } else {
+                    console.log("Response");
+                    return cachedResponse;
+                }
+            }
+        });
+}
+
 function getFromCache(evt) {
     return () => {
         return caches.match(evt.request).then((cachedResponse) => {
@@ -49,26 +71,9 @@ function getFromCache(evt) {
             }
             const url = new URL(evt.request.url);
             if (url.pathname.startsWith("/api/ledgers")) {
-                return caches
-                    .match(new Request("/api/ledgers", {method: "GET"}))
-                    .then(globalCachedResponse => {
-                        console.log(url.pathname.match(/\/api\/ledgers\/(?<id>[0-9]+)\/.*/i).groups.id);
-                        const ledgerId = /\/api\/ledgers\/(?<id>[0-9]+)\/.*/i.exec(url.pathname).groups.id;
-                        if (!cachedResponse && globalCachedResponse) {
-                            console.log("Global response");
-                            return getLedgerFromLedgers(globalCachedResponse, ledgerId);
-                        } else {
-                            const cachedDate = new Date(cachedResponse.headers.get("date"));
-                            const globalCachedDate = new Date(globalCachedResponse.headers.get("date"));
-                            if (globalCachedDate.getTime() > cachedDate.getTime()) {
-                                console.log("Global response");
-                                return getLedgerFromLedgers(globalCachedResponse, ledgerId);
-                            } else {
-                                console.log("Response");
-                                return cachedResponse;
-                            }
-                        }
-                    });
+                return getAPICache(url, cachedResponse);
+            } else if (url.pathname.startsWith("/ledgers")) {
+                return caches.match(new Request("/", {method: "GET"}));
             }
         });
     }

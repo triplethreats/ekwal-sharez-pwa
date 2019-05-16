@@ -18,7 +18,7 @@ export default class TransactionList extends React.Component<Props> {
             <List>
                 {this.props.transactions.map((value, index) => {
                     return (
-                        <ListItem key={index} className={"link-item"} button component={props => <Link {...props} to={`/ledger/${this.props.ledger.id}/transaction/${index}`}/>} >
+                        <ListItem key={index} className={"link-item"} button component={props => <Link {...props} to={`/ledgers/${this.props.ledger.id}/transaction/${index}`}/>} >
                             <TransactionView key={index} transaction={value}/>
                         </ListItem>
                     )
