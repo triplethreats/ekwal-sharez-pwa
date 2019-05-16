@@ -8,11 +8,17 @@ import LedgerApi from "../../services/ledger-api";
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import {Button} from "@material-ui/core";
+import SaveIcon from '@material-ui/icons/Save';
+import TransactionApi from "../../services/transaction-api";
+
 
 interface State {
     transaction: Transaction
     users: LedgerUser[]
     success: boolean
+    idLegder: number
+    idTransaction: numbers
 }
 
 interface MatchParams {
@@ -27,6 +33,8 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         const {idLegder, idTransaction} = this.props.match.params as MatchParams;
         LedgerApi.getLedger("", idLegder).then(ledger => {
             this.setState({
+                idLegder: idLegder,
+                idTransaction: idTransaction,
                 transaction: ledger.transactions[idTransaction],
                 users: ledger.users,
                 success: true
@@ -52,16 +60,28 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
             return (
                 <div>
                     <Grid item xs={12}><TextField
+                        id="transaction-name"
                         label="Name"
                         value={this.state.transaction.name}
+                        onChange={e => {
+                            let newTransaction = { ...this.state.transaction };
+                            newTransaction.name = e.target.value;
+                            this.setState({ transaction : newTransaction })}}
                         margin="normal"
                     /></Grid>
                     <Grid item xs={12}><TextField
+                        id="transaction-price"
                         label="Price"
                         value={this.state.transaction.total}
+                        onChange={e => {
+                            let newTransaction = { ...this.state.transaction };
+                            newTransaction.total = parseInt(e.target.value);
+                            newTransaction.payments[0].amount = parseInt(e.target.value);
+                            this.setState({ transaction : newTransaction })}}
                         margin="normal"
                     /></Grid>
                     <Grid item xs={12}><TextField
+                        id="transaction-date"
                         label="Date"
                         type="date"
                         defaultValue={this.state.transaction.date.toISOString().split('T')[0]}
@@ -71,6 +91,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     /></Grid>
                     <InputLabel htmlFor="age-simple">Payer</InputLabel>
                     <Grid item xs={12}><Select
+                        id="transaction-payer"
                         value={this.state.transaction.payments[0].user.name}
                         onChange={this.handleChange}
                         inputProps={{
@@ -84,6 +105,13 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                             </MenuItem>
                         ))}
                     </Select></Grid>
+                    <Button variant="contained" onClick={() => {
+                        TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
+                        console.log('onClick',this.state.transaction);
+                    }}>
+                        <SaveIcon/>
+                        Save
+                    </Button>
                 </div>
             );
         }
