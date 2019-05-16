@@ -1,3 +1,4 @@
 {
+  "/ledgers": "/index.html",
   "/api/*": "/$1"
 }
