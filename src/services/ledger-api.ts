@@ -1,5 +1,7 @@
 import {Ledger} from "../domain/ledger";
 import {Transaction} from "../domain/transaction";
+import {LedgerDraft} from "../domain/ledger-draft";
+import {LedgerUserDraft} from "../domain/ledger-user-draft";
 
 function serializeLedger(obj: any): Ledger {
     const ledger: Ledger = obj;
@@ -24,5 +26,26 @@ export default class LedgerApi {
         return fetch(`/api/ledgers/${ledgerId}`)
             .then(response => response.json()
                 .then(serializeLedger));
+    }
+
+    static updateLedger(ledgerId: number, updatedLedger: Ledger, newUsers: LedgerUserDraft[]): Promise<void>{
+        let fetchData = {
+            method: 'PUT',
+            body: JSON.stringify({updatedLedger:updatedLedger,newUsers:newUsers}),
+            headers: new Headers()
+        };
+        return fetch(`/api/ledgers/${ledgerId}`, fetchData).then()
+    }
+
+    static createLedger(ledgerDraft:LedgerDraft): Promise<number>{
+        let fetchData = {
+            method: 'POST',
+            body: JSON.stringify({ledgerDraft:ledgerDraft}),
+            headers: new Headers()
+        };
+        return fetch(`/api/ledgers/`, fetchData)
+            .then(response => response.json()
+                .then(function(id:number){return id;})
+            );
     }
 }
