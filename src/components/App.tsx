@@ -35,14 +35,6 @@ interface Props extends WithStyles<typeof styles> {
 
 function App(props: Props) {
     const {classes} = props;
-    fetch("/api/ledgers").then(ledgers => {
-        console.log(ledgers);
-    });
-    fetch("/api/ledgers", {method: "POST"}).then(value => {
-        console.log(value);
-    }).catch(reason => {
-        console.error(reason);
-    });
     return (
         <BrowserRouter>
             <div className="App">

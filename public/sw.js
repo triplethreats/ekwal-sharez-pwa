@@ -14,6 +14,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox
 workbox.precaching.precacheAndRoute([]);
 
 workbox.precaching.precacheAndRoute([
+    "/",
     "https://fonts.googleapis.com/css?family=Roboto:300,400,500",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc4.woff2"]);
@@ -22,12 +23,12 @@ workbox.precaching.precacheAndRoute([
 const APICACHE = "ledgerApi";
 
 self.addEventListener("install", evt => {
-   console.log("Installed");
-   /*evt.waitUntil(
-       caches.open("home").then(cache => {
-           return cache.add("/").then(() => self.skipWaiting());
-       })
-   );*/
+    console.log("Installed");
+    /*evt.waitUntil(
+        caches.open("home").then(cache => {
+            return cache.add("/").then(() => self.skipWaiting());
+        })
+    );*/
 });
 
 self.addEventListener('activate', event => {
@@ -46,31 +47,30 @@ self.addEventListener('activate', event => {
 const queue = new workbox.backgroundSync.Queue('ledgers');
 
 self.addEventListener("fetch", evt => {
-    if(!evt.request.url.startsWith(self.location.origin)){
+    if (!evt.request.url.startsWith(self.location.origin)) {
         return;
     }
     console.log("Fetch", evt.request.url);
-    if(evt.request.method === "POST") {
+    if (evt.request.method === "POST") {
         console.log("Posting data");
         const promiseChain = fetch(evt.request.clone());
         promiseChain.catch(() => {
-           return queue.pushRequest({request: evt.request});
+            return queue.pushRequest({request: evt.request});
         });
         evt.respondWith(promiseChain);
     } else {
         console.log("Getting data");
         evt.respondWith(
-            caches.open());
-        caches.match(evt.request).then(cachedResponse => {
-            if (cachedResponse) {
-                return cachedResponse;
-            } else {
-                return caches.open(APICACHE).then(cache => {
-                    return fetch(evt.request).then(response => {
-                        return cache.put(evt.request, response.clone()).then(() => response);
+            caches.match(evt.request).then(cachedResponse => {
+                if (cachedResponse) {
+                    return cachedResponse;
+                } else {
+                    return caches.open(APICACHE).then(cache => {
+                        return fetch(evt.request).then(response => {
+                            return cache.put(evt.request, response.clone()).then(() => response);
+                        });
                     });
-                });
-            }
-        });
+                }
+            }));
     }
 });

@@ -16,9 +16,10 @@
   "scripts": {
     "start": "parcel public/index.html",
     "build": "parcel build public/index.html",
-    "postbuild": "workbox injectManifest workbox-config.js",
+    "postbuild": "npm run build:sw",
     "build:sw": "workbox injectManifest workbox-config.js",
-    "serve": "http-server dist/",
+    "preserve": "npm run build",
+    "serve": "json-server -w ledgers.json -s dist/ -r routes.json",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
