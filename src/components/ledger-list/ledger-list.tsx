@@ -1,30 +1,29 @@
 import * as React from "react";
 import './ledger-list.css'
 import {Ledger} from "../../domain/ledger";
-import Link from "react-router-dom/Link";
+import {Link, RouteComponentProps} from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import LedgerApi from "../../services/ledger-api";
 
-const ledgers: Ledger[] = [
-    {
-        title: "Amsterdam",
-        description: "Trip to Amsterdam",
-        transactions: [
-            {total: 50, date: new Date(Date.now()), payments: [
-                    {amount: 50, user: {name: 'Rafael'}}
-                ], name: 'Chipsy King'},
-            {total: 60, date: new Date(Date.now()), payments:[
-                    {amount: 60, user: {name: 'Rafael'}}
-                ], name: 'Sweetness'}],
-        users: [{name: 'Rafael'}, {name: 'Arthur'}, {name: 'Kevin'}]
+interface State {
+    ledgers: Ledger[];
+}
+
+export default class LedgerList extends React.Component<RouteComponentProps, State>{
+
+    state = {ledgers: []};
+
+    componentWillMount(): void {
+        LedgerApi.getLedgers("").then(ledgers => {
+            this.setState({ledgers});
+        });
     }
-];
 
-export default class LedgerList extends React.Component{
     render() {
         return (
             <List component="nav">
-                {ledgers.map((value, index) => {
+                {this.state.ledgers.map((value, index) => {
                     return <ListItem key={index} button component={props => <Link to={`/ledger/${index}`} {...props} />} className={"link-item"}>
                         <h2>{value.title}</h2>
                         <p>{value.description}</p>

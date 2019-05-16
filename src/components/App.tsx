@@ -5,10 +5,7 @@ import Header from "./header/header";
 import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core";
 import LedgerView from "./ledger-view/ledger-view";
 import TransactionEdit from "./transaction-edit/transaction-edit";
-import BrowserRouter from "react-router-dom/BrowserRouter";
-import Route from "react-router-dom/Route";
-import Switch from "react-router-dom/Switch";
-import Redirect from "react-router-dom/Redirect";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 
 const headerHeight = "8vh";
 const footerHeight = "4vh";
@@ -38,6 +35,14 @@ interface Props extends WithStyles<typeof styles> {
 
 function App(props: Props) {
     const {classes} = props;
+    fetch("/api/ledgers").then(ledgers => {
+        console.log(ledgers);
+    });
+    fetch("/api/ledgers", {method: "POST"}).then(value => {
+        console.log(value);
+    }).catch(reason => {
+        console.error(reason);
+    });
     return (
         <BrowserRouter>
             <div className="App">
@@ -47,8 +52,7 @@ function App(props: Props) {
                         <Route path={"/ledger/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
                         <Route path={"/ledgers"} component={LedgerList}/>
                         <Route path={"/ledger/:id"} component={LedgerView} />
-                        <Redirect to={"/ledgers"} from={"/"} exact={true} strict={true}/>
-                        <Route render={props1 => (<h2>404 Not found</h2>)}/>
+                        <Route path={"/"} component={LedgerList}/>
                     </Switch>
                 </main>
             </div>

@@ -8,27 +8,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TransactionList from "../transaction-list/transaction-list";
 import {TransactionPayment} from "../../domain/transaction-payment";
 import {LedgerUser} from "../../domain/ledger-user";
+import LedgerApi from "../../services/ledger-api";
 
 interface Props {
     transaction: Transaction
     users: LedgerUser[]
 }
-
-const ledgers: Ledger[] = [
-    {
-        id: 0,
-        title: "Amsterdam",
-        description: "Trip to Amsterdam",
-        transactions: [
-            {id:0,total: 50, date: new Date(Date.now()), payments: [
-                    {id:0,amount: 50, user: {id:0,name: 'Rafael'}}
-                ], name: 'Chipsy King'},
-            {id:1,total: 60, date: new Date(Date.now()), payments:[
-                    {id:1,amount: 60, user: {id:0,name: 'Rafael'}}
-                ], name: 'Sweetness'}],
-        users: [{id:0,name: 'Rafael'}, {id:1,name: 'Arthur'}, {id:2,name: 'Kevin'}]
-    }
-];
 
 interface MatchParams {
     idTransaction: number;
@@ -40,11 +25,14 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
 
     componentWillMount(): void {
         const {idLegder, idTransaction} = this.props.match.params as MatchParams;
-        this.setState({
-            transaction: ledgers[idLegder].transactions[idTransaction],
-            users: ledgers[idLegder].users
+        LedgerApi.getLedger("", idLegder).then(ledger => {
+            this.setState({
+                transaction: ledger.transactions[idTransaction],
+                users: ledger.users
+            });
+            console.log("state", ledger.transactions[idTransaction]);
         });
-        console.log("state",ledgers[idLegder].transactions[idTransaction]);
+
     }
 
     render() {

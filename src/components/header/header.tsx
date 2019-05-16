@@ -1,7 +1,7 @@
 import * as React from "react";
 import './header.css'
 import logo from "../../../public/favicon.png";
-import Link from "react-router-dom/Link";
+import {Link} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
