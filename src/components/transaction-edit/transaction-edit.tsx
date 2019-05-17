@@ -1,4 +1,5 @@
 import * as React from "react";
+import './transaction-edit.css';
 import {Transaction} from "../../domain/transaction";
 import TextField from '@material-ui/core/TextField';
 import {Redirect, RouteComponentProps} from "react-router";
@@ -74,6 +75,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     <Grid item xs={12}><TextField
                         id="transaction-price"
                         label="Price"
+                        type="number"
                         value={this.state.transaction.total}
                         onChange={e => {
                             let newTransaction = { ...this.state.transaction };

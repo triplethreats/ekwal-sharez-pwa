@@ -1,4 +1,5 @@
 import * as React from "react";
+import './transaction-view.css';
 import {Transaction} from "../../domain/transaction";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";

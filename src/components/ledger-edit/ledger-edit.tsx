@@ -1,11 +1,9 @@
 import * as React from "react";
+import './ledger-edit.css';
 import TextField from '@material-ui/core/TextField';
 import {Redirect, RouteComponentProps} from "react-router";
-import MenuItem from '@material-ui/core/MenuItem';
 import LedgerApi from "../../services/ledger-api";
 import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
 import {Ledger} from "../../domain/ledger";
 import {Link} from "react-router-dom";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
