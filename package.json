@@ -18,7 +18,7 @@
     "build": "parcel build public/index.html",
     "postbuild": "npm run build:sw",
     "build:sw": "cpy public/sw.js dist/",
-    "serve": "json-server -w ledgers.json -s dist/ -r routes.json",
+    "serve": "json-server -w ledgers.json -s dist/ -r routes.json --port 3001",
     "buildServe" : "npm run build",
     "postbuildServe": "npm run serve",
     "test": "react-scripts test",

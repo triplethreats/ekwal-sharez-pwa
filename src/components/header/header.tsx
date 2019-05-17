@@ -12,12 +12,21 @@ import AppBar from "@material-ui/core/AppBar";
 
 interface State {
     anchorEl: null | HTMLElement;
+    online: boolean;
 }
 
 export default class Header extends React.Component<any, State> {
     state: State = {
-        anchorEl: null
+        anchorEl: null,
+        online: false
     };
+
+    componentWillMount(): void {
+        fetch("/", {method: "HEAD"}).then(response => {
+           this.setState({anchorEl: this.state.anchorEl, online: response.ok});
+        });
+    }
+
     closeMenu() {
         this.setState({anchorEl: null});
     }
@@ -27,7 +36,12 @@ export default class Header extends React.Component<any, State> {
     }
 
     render() {
-        const {anchorEl} = this.state;
+        const {anchorEl, online} = this.state;
+        const authButtons = [];
+        if(this.state.online) {
+            authButtons.push(<MenuItem button component={props => <Link {...props} to={`/sign_in`}/>}>Sign In</MenuItem>);
+            authButtons.push(<MenuItem button component={props => <Link {...props} to={`/sign_up`}/>}>Sign Up</MenuItem>);
+        }
         return (
             <AppBar position={"fixed"} className={`app-bar ${this.props.className}`}>
                 <Link to={"/"}>
@@ -50,8 +64,9 @@ export default class Header extends React.Component<any, State> {
                               vertical: 'top',
                               horizontal: 'right',
                           }}>
-                        <MenuItem button component={props => <Link {...props} to={`/sign_in`}/>}>Sign In</MenuItem>
-                        <MenuItem button component={props => <Link {...props} to={`/sign_up`}/>}>Sign Up</MenuItem>
+                        {authButtons.map(value => {
+                            return value;
+                        })}
                     </Menu>
                 </Toolbar>
             </AppBar>
