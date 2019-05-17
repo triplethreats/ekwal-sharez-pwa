@@ -10,8 +10,6 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
 import Button from "@material-ui/core/Button";
 import {LedgerDraft} from "../../domain/ledger-draft";
 import {LedgerUserDraft} from "../../domain/ledger-user-draft";
-import ListItem from "@material-ui/core/ListItem";
-import TransactionApi from "../../services/transaction-api";
 import SaveIcon from "@material-ui/core/SvgIcon/SvgIcon";
 
 
@@ -58,45 +56,7 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
 
     render() {
         console.log("state",this.state)
-        /*if(this.state.newPage){
-            return (
-                <div>
-                    <Grid item xs={12}><TextField
-                        label="Title"
-                        value=""
-                        margin="normal"
-                    /></Grid>
-                    <Grid item xs={12}><TextField
-                        label="Description"
-                        value=""
-                        margin="normal"
-                    /></Grid>
-                    <Grid item xs={12}>
-                        <Button variant="contained" onClick={(e) => { this.state.usersDraft.push({name:""}); this.setState(this.state) }} >
-                            Add
-                        </Button>
-                        {this.state.hasOwnProperty("ledger") ? this.state.ledger.users.map((value, index) => {
-                            return <Grid item xs={12}><TextField
-                                defaultValue={value.name}
-                                margin="normal"
-                                onChange={(e)=>{this.state.ledger.users[index].name = e.target.value; console.log("toto",this.state)}}
-                            /></Grid>
-                        }):""}
-                        {this.state.usersDraft.map((value, index) => {
-                            return <Grid item xs={12}><TextField
-                                defaultValue={value.name}
-                                margin="normal"
-                                onChange={(e)=>{this.state.usersDraft[index].name = e.target.value; console.log("toto",this.state)}}
-                            /></Grid>
-                        })}
-                    </Grid>
-                    <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLedger}/transactions`}/>} >
-                        <ArrowBackIosIcon/>
-                    </Button>
-                </div>
-            );
-        }
-        else */if (!this.state.success) {
+        if (!this.state.success) {
             return <Redirect to={"/"}/>
         } else if (!this.state.ledger && !this.state.newPage) {
             return <p>Loading...</p>

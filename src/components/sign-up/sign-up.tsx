@@ -2,34 +2,51 @@ import * as React from 'react';
 import './sign-up.css';
 import {Redirect, RouteComponentProps} from "react-router";
 import {Button, TextField} from "@material-ui/core";
+import LedgerApi from "../../services/ledger-api";
+import UserApi from "../../services/user-api";
+import Grid from "@material-ui/core/Grid";
 
 interface State {
+    email:string
+    password:string
 }
 
 export default class SignUp extends React.Component<RouteComponentProps, State> {
 
-    state = {} as State;
+    state = {email:"",password:""} as State;
 
     componentWillMount(): void {}
 
     render(){
         return (
             <div>
-                <TextField
+                <Grid item xs={12}><TextField
                     label="Email"
                     type="email"
                     name="email"
+                    value={this.state.email}
+                    onChange={(e)=>{
+                        this.state.email = e.target.value;
+                        this.setState(this.state);
+                    }}
                     autoComplete="email"
                     margin="normal"
-                />
-                <TextField
+                /></Grid>
+                <Grid item xs={12}><TextField
                     label="Password"
                     type="password"
+                    value={this.state.password}
+                    onChange={(e)=>{
+                        this.state.password = e.target.value;
+                        this.setState(this.state);
+                    }}
                     margin="normal"
-                />
-                <Button variant="contained">
+                /></Grid>
+                <Grid item xs={12}><Button variant="contained"onClick={() => {
+                    UserApi.createUser(this.state.email,this.state.password);
+                }}>
                     Sign up
-                </Button>
+                </Button></Grid>
             </div>
         );
 
