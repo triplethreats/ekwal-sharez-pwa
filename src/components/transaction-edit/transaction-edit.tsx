@@ -11,6 +11,8 @@ import Select from '@material-ui/core/Select';
 import {Button} from "@material-ui/core";
 import SaveIcon from '@material-ui/icons/Save';
 import TransactionApi from "../../services/transaction-api";
+import {Link} from "react-router-dom";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
 
 
 interface State {
@@ -18,7 +20,7 @@ interface State {
     users: LedgerUser[]
     success: boolean
     idLegder: number
-    idTransaction: numbers
+    idTransaction: number
 }
 
 interface MatchParams {
@@ -110,6 +112,9 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     }}>
                         <SaveIcon/>
                         Save
+                    </Button>
+                    <Button variant="contained" component={props => <Link {...props} to={`/ledger/${this.state.idLegder}/transactions`}/>} >
+                        <ArrowBackIosIcon/>
                     </Button>
                 </div>
             );

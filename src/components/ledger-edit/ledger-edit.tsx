@@ -7,10 +7,14 @@ import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import {Ledger} from "../../domain/ledger";
+import {Link} from "react-router-dom";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
+import Button from "@material-ui/core/Button";
 
 interface State {
     ledger: Ledger;
     success: boolean;
+    idLedger: number;
 }
 
 interface MatchParams {
@@ -26,6 +30,7 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
         LedgerApi.getLedger("", idLegder).then(ledger => {
             this.setState({
                 ledger: ledger,
+                idLedger: idLegder,
                 success: true
             });
         }).catch(reason => {
@@ -53,6 +58,9 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
                         value={this.state.ledger.description}
                         margin="normal"
                     /></Grid>
+                    <Button variant="contained" component={props => <Link {...props} to={`/ledger/${this.state.idLedger}/transactions`}/>} >
+                        <ArrowBackIosIcon/>
+                    </Button>
                 </div>
             );
         }

@@ -8,9 +8,8 @@ import LedgerApi from "../../services/ledger-api";
 import CreateIcon from "@material-ui/icons/Create"
 import Button from "@material-ui/core/Button";
 import {Grid} from "@material-ui/core";
-import TransactionApi from "../../services/transaction-api";
 import {Link} from "react-router-dom";
-import ListItem from "@material-ui/core/ListItem";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
 
 interface State {
     ledger: Ledger,
@@ -51,6 +50,9 @@ export default class LedgerView extends React.Component<RouteComponentProps, Sta
                         </Button>
                     </Grid>
                     <TransactionList transactions={this.state.ledger.transactions} ledger={this.state.ledger}/>
+                    <Button variant="contained" component={props => <Link {...props} to={`/ledgers`}/>} >
+                        <ArrowBackIosIcon/>
+                    </Button>
                 </div>
             );
         }
