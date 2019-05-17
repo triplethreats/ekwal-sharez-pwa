@@ -14,7 +14,6 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox
 const APICACHE = "ledgerApi2";
 
 self.addEventListener("install", evt => {
-    console.log("Installed");
 });
 
 self.addEventListener('activate', event => {
@@ -46,16 +45,13 @@ function getAPICache(url, cachedResponse) {
         .then(globalCachedResponse => {
             const ledgerId = /\/api\/ledgers\/(?<id>[0-9]+)(\/.*)?/i.exec(url.pathname).groups.id;
             if (!cachedResponse && globalCachedResponse) {
-                console.log("Global response");
                 return getLedgerFromLedgers(globalCachedResponse, ledgerId);
             } else {
                 const cachedDate = new Date(cachedResponse.headers.get("date"));
                 const globalCachedDate = new Date(globalCachedResponse.headers.get("date"));
                 if (globalCachedDate.getTime() > cachedDate.getTime()) {
-                    console.log("Global response");
                     return getLedgerFromLedgers(globalCachedResponse, ledgerId);
                 } else {
-                    console.log("Response");
                     return cachedResponse;
                 }
             }
@@ -66,7 +62,6 @@ function getFromCache(evt) {
     return () => {
         return caches.match(evt.request).then((cachedResponse) => {
             if (cachedResponse) {
-                console.log("Response", cachedResponse.clone());
                 return cachedResponse;
             }
             const url = new URL(evt.request.url);
@@ -167,12 +162,10 @@ function handleModification(evt, handler) {
 }
 
 self.addEventListener("online", () => {
-    console.log("IsOnline");
     queue.replayRequests();
 });
 
 self.addEventListener("fetch", evt => {
-    console.log("Fetch", evt.request.url);
     if (evt.request.method === "HEAD") return;
     if (evt.request.method === "POST") {
         handleModification(evt, handleCreate);
