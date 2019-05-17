@@ -115,7 +115,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                         <SaveIcon/>
                         Save
                     </Button>
-                    <Button variant="contained" component={props => <Link {...props} to={`/ledger/${this.state.idLegder}/transactions`}/>} >
+                    <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLegder}/transactions`}/>} >
                         <ArrowBackIosIcon/>
                     </Button>
                 </div>

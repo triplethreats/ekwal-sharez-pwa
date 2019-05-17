@@ -56,7 +56,7 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
                         value={this.state.ledger.description}
                         margin="normal"
                     /></Grid>
-                    <Button variant="contained" component={props => <Link {...props} to={`/ledger/${this.state.idLedger}/transactions`}/>} >
+                    <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLedger}/transactions`}/>} >
                         <ArrowBackIosIcon/>
                     </Button>
                 </div>

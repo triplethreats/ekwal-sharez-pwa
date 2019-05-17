@@ -44,7 +44,10 @@ export default class LedgerView extends React.Component<RouteComponentProps, Sta
                 <div>
                     <Typography variant={"h2"} style={{textAlign: "center"}}>{this.state.ledger.title}</Typography>
                     <Grid container justify="flex-end">
-                        <Button variant="contained" component={props => <Link {...props} to={`/ledger/${this.state.ledgerId}`}/>} >
+                        <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.ledgerId}/transactions/new`}/>} >
+                            Add
+                        </Button>
+                        <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.ledgerId}`}/>} >
                             <CreateIcon/>
                             Modify
                         </Button>
