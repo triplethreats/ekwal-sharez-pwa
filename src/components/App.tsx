@@ -7,6 +7,8 @@ import LedgerView from "./ledger-view/ledger-view";
 import TransactionEdit from "./transaction-edit/transaction-edit";
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import LedgerEdit from "./ledger-edit/ledger-edit";
+import SignIn from "./sign-in/sign-in";
+import SignUp from "./sign-up/sign-up";
 
 const headerHeight = "8vh";
 const footerHeight = "4vh";
@@ -46,6 +48,8 @@ function App(props: Props) {
                         <Route path={"/ledger/:id/transactions"} component={LedgerView} />
                         <Route path={"/ledger/:idLegder"} component={LedgerEdit} />
                         <Route path={"/ledgers"} component={LedgerList}/>
+                        <Route path={"/sign_in"} component={SignIn}/>
+                        <Route path={"/sign_up"} component={SignUp}/>
                         <Route path={"/"} component={LedgerList}/>
                     </Switch>
                 </main>

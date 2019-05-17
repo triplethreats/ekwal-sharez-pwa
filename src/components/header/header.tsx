@@ -50,7 +50,8 @@ export default class Header extends React.Component<any, State> {
                               vertical: 'top',
                               horizontal: 'right',
                           }}>
-                        <MenuItem>Auth</MenuItem>
+                        <MenuItem button component={props => <Link {...props} to={`/sign_in`}/>}>Sign In</MenuItem>
+                        <MenuItem button component={props => <Link {...props} to={`/sign_up`}/>}>Sign Up</MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>
