@@ -25,7 +25,7 @@ export default class Repartition extends React.Component<RouteComponentProps, St
 
     componentWillMount(): void {
         const {idLedger} = this.props.match.params as {idLedger:number};
-        LedgerApi.getLedger("", idLedger).then(ledger => {
+        LedgerApi.getLedger(idLedger).then(ledger => {
             this.setState({
                 idLedger: idLedger,
                 ledger:ledger,

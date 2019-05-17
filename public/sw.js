@@ -137,6 +137,9 @@ function handleUpdate(evt, objects, updatedObject) {
 }
 
 function handleModification(evt, handler) {
+    if(new URL(evt.request.url).pathname.startsWith("/api/users")){
+        return;
+    }
     const promiseChain = fetch(evt.request.clone());
     queue.pushRequest({request: evt.request.clone()});
     evt.respondWith(promiseChain.then(response => {
@@ -168,9 +171,9 @@ self.addEventListener("online", () => {
 self.addEventListener("fetch", evt => {
     if (evt.request.method === "HEAD") return;
     if (evt.request.method === "POST") {
-        handleModification(evt, handleCreate);
+        return handleModification(evt, handleCreate);
     } else if (evt.request.method === "PUT") {
-        handleModification(evt, handleUpdate);
+        return handleModification(evt, handleUpdate);
     } else {
         const response = fetch(evt.request.clone()).then((response) => {
             if (response.ok) {

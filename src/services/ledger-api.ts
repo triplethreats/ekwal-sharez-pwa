@@ -2,6 +2,7 @@ import {Ledger} from "../domain/ledger";
 import {Transaction} from "../domain/transaction";
 import {LedgerDraft} from "../domain/ledger-draft";
 import {LedgerUserDraft} from "../domain/ledger-user-draft";
+import {TokenHolder} from "./TokenHolder";
 
 function serializeLedger(obj: any): Ledger {
     const ledger: Ledger = obj;
@@ -16,36 +17,47 @@ function serializeTransaction(obj: any): Transaction {
 }
 
 export default class LedgerApi {
-    static getLedgers(mail: string): Promise<Ledger[]> {
-        return fetch("/api/ledgers")
+    static getLedgers(): Promise<Ledger[]> {
+        const headers = new Headers();
+        headers.set("Authorization", `Bearer ${TokenHolder.getToken()}`);
+        headers.set("Content-Type", "application/json");
+        return fetch("/api/ledgers", {headers})
             .then(response => response.json())
             .then((ledgers: Ledger[]) => ledgers.map(serializeLedger));
     }
 
-    static getLedger(mail: string, ledgerId: number): Promise<Ledger> {
-        return fetch(`/api/ledgers/${ledgerId}`)
+    static getLedger(ledgerId: number): Promise<Ledger> {
+        const headers = new Headers();
+        headers.set("Authorization", `Bearer ${TokenHolder.getToken()}`);
+        headers.set("Content-Type", "application/json");
+        return fetch(`/api/ledgers/${ledgerId}`, {headers})
             .then(response => response.json())
             .then(serializeLedger);
     }
 
     static updateLedger(ledgerId: number, updatedLedger: Ledger, newUsers: LedgerUserDraft[]): Promise<void>{
+        const headers = new Headers();
+        headers.set("Authorization", `Bearer ${TokenHolder.getToken()}`);
+        headers.set("Content-Type", "application/json");
         let fetchData = {
             method: 'PUT',
-            body: JSON.stringify({updatedLedger:updatedLedger,newUsers:newUsers}),
-            headers: new Headers()
+            body: JSON.stringify({updatedLedger, newUsers}),
+            headers: headers
         };
         return fetch(`/api/ledgers/${ledgerId}`, fetchData).then();
     }
 
     static createLedger(ledgerDraft:LedgerDraft): Promise<Ledger>{
+        const headers = new Headers();
+        headers.set("Authorization", `Bearer ${TokenHolder.getToken()}`);
+        headers.set("Content-Type", "application/json");
         let fetchData = {
             method: 'POST',
             body: JSON.stringify(ledgerDraft),
-            headers: new Headers()
+            headers: headers
         };
         return fetch(`/api/ledgers/`, fetchData)
-            .then(response => response.json()
-                .then(function(ledger:Ledger){return ledger;})
-            );
+            .then(response => response.json())
+            .then(function(id: number){return id;});
     }
 }

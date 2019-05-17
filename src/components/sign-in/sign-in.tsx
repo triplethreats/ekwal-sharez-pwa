@@ -4,6 +4,7 @@ import {Redirect, RouteComponentProps} from "react-router";
 import {Button, TextField} from "@material-ui/core";
 import UserApi from "../../services/user-api";
 import Grid from "@material-ui/core/Grid";
+import {TokenHolder} from "../../services/TokenHolder";
 
 interface State {
     email:string
@@ -42,7 +43,9 @@ export default class SignIn extends React.Component<RouteComponentProps, State> 
                     margin="normal"
                 /></Grid>
                 <Grid item xs={12}><Button variant="contained"onClick={() => {
-                    UserApi.connectUser(this.state.email,this.state.password);
+                    UserApi.connectUser(this.state.email,this.state.password).then(token => {
+                        TokenHolder.setToken(token);
+                    });
                 }}>
                     Sign in
                 </Button></Grid>

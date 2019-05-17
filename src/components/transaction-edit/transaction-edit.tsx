@@ -40,7 +40,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         const pathSplit = path.split("/");
         if(pathSplit[pathSplit.length-1]==="new"){
             const {idLegder} = this.props.match.params as {idLegder: number};
-            LedgerApi.getLedger("", idLegder).then(ledger => {
+            LedgerApi.getLedger(idLegder).then(ledger => {
                 this.setState({
                     newPage: true,
                     success:true,
@@ -55,11 +55,11 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
             });
         }else {
             const {idLegder, idTransaction} = this.props.match.params as MatchParams;
-            LedgerApi.getLedger("", idLegder).then(ledger => {
+            LedgerApi.getLedger(idLegder).then(ledger => {
                 this.setState({
                     idLegder: idLegder,
                     idTransaction: idTransaction,
-                    transaction: ledger.transactions[idTransaction],
+                    transaction: ledger.transactions.find(transaction => transaction.id == idTransaction),
                     users: ledger.users,
                     success: true,
                     newPage: false
@@ -142,7 +142,11 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                         ))}
                     </Select></Grid>
                     <Grid item xs={12}><Button variant="contained" onClick={() => {
-                        TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
+                        if(this.state.newPage) {
+                            TransactionApi.createTransaction(this.state.idLegder, this.state.transactionDraft);
+                        } else {
+                            TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
+                        }
                     }}>
                         <SaveIcon/>
                         {this.state.newPage ? "Create" :"Save"}

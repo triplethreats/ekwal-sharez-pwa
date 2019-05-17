@@ -5,6 +5,7 @@ export default class UserApi {
             body: JSON.stringify({email:email,password:password}),
             headers: new Headers()
         };
+        fetchData.headers.set("Content-Type", "application/json");
         return fetch(`/api/users/signup`, fetchData).then();
     }
     static connectUser(email: string, password: string): Promise<string>{
@@ -13,6 +14,11 @@ export default class UserApi {
             body: JSON.stringify({email:email,password:password}),
             headers: new Headers()
         };
-        return fetch(`/api/users/signin`, fetchData).then();
+        fetchData.headers.set("Content-Type", "application/json");
+        return fetch(`/api/users/signin`, fetchData).then(response => {
+            return response.body.getReader().read().then(value => {
+                return new TextDecoder("utf-8").decode(value.value);
+            });
+        });
     }
 }

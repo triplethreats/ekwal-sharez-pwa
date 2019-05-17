@@ -27,7 +27,7 @@ export default class LedgerView extends React.Component<RouteComponentProps, Sta
 
     componentWillMount(): void {
         const {id} = this.props.match.params as MatchParams;
-        LedgerApi.getLedger("", id).then(ledger => {
+        LedgerApi.getLedger(id).then(ledger => {
             this.setState({ledger: ledger, success: true,ledgerId: id});
         }).catch(reason => {
             this.setState({success: false});

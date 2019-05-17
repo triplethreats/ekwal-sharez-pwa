@@ -39,7 +39,7 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
                 ledgerDraft:{title:"",description:"",users:[]}
             });
         }else {
-            LedgerApi.getLedger("", idLegder).then(ledger => {
+            LedgerApi.getLedger(idLegder).then(ledger => {
                 this.setState({
                     ledger: ledger,
                     idLedger: idLegder,

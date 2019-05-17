@@ -16,7 +16,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
     state = {ledgers: []};
 
     componentWillMount(): void {
-        LedgerApi.getLedgers("").then(ledgers => {
+        LedgerApi.getLedgers().then(ledgers => {
             this.setState({ledgers});
         });
     }
@@ -26,7 +26,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
             <div>
                 <List component="nav">
                     {this.state.ledgers.map((value, index) => {
-                        return <ListItem key={index} button component={props => <Link to={`/ledgers/${index}/transactions`} {...props} />} className={"link-item"}>
+                        return <ListItem key={index} button component={props => <Link to={`/ledgers/${value.id}/transactions`} {...props} />} className={"link-item"}>
                             <h2>{value.title}</h2>
                             <p>{value.description}</p>
                         </ListItem>
