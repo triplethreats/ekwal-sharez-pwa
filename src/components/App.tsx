@@ -44,7 +44,7 @@ function App(props: Props) {
                     <Switch>
                         <Route path={"/ledger/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
                         <Route path={"/ledger/:id/transactions"} component={LedgerView} />
-                        <Route path={"/ledger/:idLegder/"} component={LedgerEdit} />
+                        <Route path={"/ledger/:idLegder"} component={LedgerEdit} />
                         <Route path={"/ledgers"} component={LedgerList}/>
                         <Route path={"/"} component={LedgerList}/>
                     </Switch>

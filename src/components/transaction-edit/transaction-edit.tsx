@@ -107,7 +107,6 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     </Select></Grid>
                     <Button variant="contained" onClick={() => {
                         TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
-                        console.log('onClick',this.state.transaction);
                     }}>
                         <SaveIcon/>
                         Save
