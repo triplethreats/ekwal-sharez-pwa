@@ -37,7 +37,7 @@ export default class LedgerApi {
         return fetch(`/api/ledgers/${ledgerId}`, fetchData).then();
     }
 
-    static createLedger(ledgerDraft:LedgerDraft): Promise<number>{
+    static createLedger(ledgerDraft:LedgerDraft): Promise<Ledger>{
         let fetchData = {
             method: 'POST',
             body: JSON.stringify(ledgerDraft),
@@ -45,7 +45,7 @@ export default class LedgerApi {
         };
         return fetch(`/api/ledgers/`, fetchData)
             .then(response => response.json()
-                .then(function(id:number){return id;})
+                .then(function(ledger:Ledger){return ledger;})
             );
     }
 }

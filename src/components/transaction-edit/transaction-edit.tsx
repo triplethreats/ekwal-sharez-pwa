@@ -22,6 +22,7 @@ interface State {
     success: boolean
     idLegder: number
     idTransaction: number
+    newPage: boolean
 }
 
 interface MatchParams {
@@ -33,21 +34,33 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
     state: State = {success: true} as State;
 
     componentWillMount(): void {
-        const {idLegder, idTransaction} = this.props.match.params as MatchParams;
-        LedgerApi.getLedger("", idLegder).then(ledger => {
+        const path = window.location.pathname;
+        const pathSplit = path.split("/");
+        console.log("la2",pathSplit);
+        if(pathSplit[pathSplit.length-1]==="new"){
+            console.log("la");
             this.setState({
-                idLegder: idLegder,
-                idTransaction: idTransaction,
-                transaction: ledger.transactions[idTransaction],
-                users: ledger.users,
-                success: true
+                newPage: true,
+                success:true
             });
-            console.log("state", ledger.transactions[idTransaction]);
-        }).catch(reason => {
-            this.setState({
-                success: false
+        }else {
+            const {idLegder, idTransaction} = this.props.match.params as MatchParams;
+            LedgerApi.getLedger("", idLegder).then(ledger => {
+                this.setState({
+                    idLegder: idLegder,
+                    idTransaction: idTransaction,
+                    transaction: ledger.transactions[idTransaction],
+                    users: ledger.users,
+                    success: true,
+                    newPage: false
+                });
+                console.log("state", ledger.transactions[idTransaction]);
+            }).catch(reason => {
+                this.setState({
+                    success: false
+                });
             });
-        });
+        }
     }
     handleChange = (event: { target: { value: string; }; }) => {
         let newTransaction = { ...this.state.transaction };
@@ -55,9 +68,10 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         this.setState({ transaction: newTransaction });
     };
     render() {
+        console.log("state",this.state);
         if (!this.state.success) {
             return <Redirect to={"/"}/>
-        } else if (!this.state.transaction) {
+        } else if (!this.state.transaction && !this.state.newPage) {
             return <p>Loading...</p>
         } else {
             return (
@@ -65,7 +79,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     <Grid item xs={12}><TextField
                         id="transaction-name"
                         label="Name"
-                        value={this.state.transaction.name}
+                        value={this.state.newPage ? "" : this.state.transaction.name}
                         onChange={e => {
                             let newTransaction = { ...this.state.transaction };
                             newTransaction.name = e.target.value;
@@ -76,7 +90,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                         id="transaction-price"
                         label="Price"
                         type="number"
-                        value={this.state.transaction.total}
+                        value={this.state.newPage ? "" : this.state.transaction.total}
                         onChange={e => {
                             let newTransaction = { ...this.state.transaction };
                             newTransaction.total = parseInt(e.target.value);
@@ -88,7 +102,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                         id="transaction-date"
                         label="Date"
                         type="date"
-                        defaultValue={this.state.transaction.date.toISOString().split('T')[0]}
+                        defaultValue={this.state.newPage ? new Date().toISOString().split("T")[0] : this.state.transaction.date.toISOString().split('T')[0]}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -96,14 +110,14 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     <InputLabel htmlFor="age-simple">Payer</InputLabel>
                     <Grid item xs={12}><Select
                         id="transaction-payer"
-                        value={this.state.transaction.payments[0].user.name}
+                        value={this.state.newPage ? "" : this.state.transaction.payments[0].user.name}
                         onChange={this.handleChange}
                         inputProps={{
                             name: 'Payer',
                             id: 'payer-simple',
                         }}
                     >
-                        {this.state.users.map(user => (
+                        {this.state.newPage ? "" : this.state.users.map(user => (
                             <MenuItem value={user.name}>
                                 {user.name}
                             </MenuItem>
@@ -113,7 +127,7 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                         TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
                     }}>
                         <SaveIcon/>
-                        Save
+                        {this.state.newPage ? "Create" :"Save"}
                     </Button>
                     <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLegder}/transactions`}/>} >
                         <ArrowBackIosIcon/>
