@@ -6,7 +6,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import LedgerApi from "../../services/ledger-api";
 import {Button} from "@material-ui/core";
-import ArrowBackIosIcon from "@material-ui/core/SvgIcon/SvgIcon";
 
 interface State {
     ledgers: Ledger[];

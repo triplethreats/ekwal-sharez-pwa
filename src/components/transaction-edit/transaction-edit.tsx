@@ -38,11 +38,8 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
     componentWillMount(): void {
         const path = window.location.pathname;
         const pathSplit = path.split("/");
-        console.log("la2",pathSplit);
         if(pathSplit[pathSplit.length-1]==="new"){
-            console.log("la");
             const {idLegder} = this.props.match.params as {idLegder: number};
-            console.log("id",idLegder);
             LedgerApi.getLedger("", idLegder).then(ledger => {
                 this.setState({
                     newPage: true,
@@ -67,7 +64,6 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     success: true,
                     newPage: false
                 });
-                console.log("state", ledger.transactions[idTransaction]);
             }).catch(reason => {
                 this.setState({
                     success: false
@@ -84,7 +80,6 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         this.setState(this.state);
     };
     render() {
-        console.log("state",this.state);
         if (!this.state.success) {
             return <Redirect to={"/"}/>
         } else if (!this.state.transaction && !this.state.newPage) {
@@ -146,12 +141,12 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                             </MenuItem>
                         ))}
                     </Select></Grid>
-                    <Button variant="contained" onClick={() => {
+                    <Grid item xs={12}><Button variant="contained" onClick={() => {
                         TransactionApi.updateTransaction(this.state.idLegder,this.state.idTransaction,this.state.transaction);
                     }}>
                         <SaveIcon/>
                         {this.state.newPage ? "Create" :"Save"}
-                    </Button>
+                    </Button></Grid>
                     <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLegder}/transactions`}/>} >
                         <ArrowBackIosIcon/>
                     </Button>

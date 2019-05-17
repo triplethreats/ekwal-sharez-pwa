@@ -2,8 +2,6 @@ import * as React from 'react';
 import './sign-in.css';
 import {Redirect, RouteComponentProps} from "react-router";
 import {Button, TextField} from "@material-ui/core";
-import {Link} from "react-router-dom";
-import ArrowBackIosIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import UserApi from "../../services/user-api";
 import Grid from "@material-ui/core/Grid";
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import './sign-up.css';
 import {Redirect, RouteComponentProps} from "react-router";
 import {Button, TextField} from "@material-ui/core";
-import LedgerApi from "../../services/ledger-api";
 import UserApi from "../../services/user-api";
 import Grid from "@material-ui/core/Grid";
 

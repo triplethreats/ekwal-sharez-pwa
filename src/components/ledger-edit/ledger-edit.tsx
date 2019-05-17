@@ -55,7 +55,6 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
     }
 
     render() {
-        console.log("state",this.state)
         if (!this.state.success) {
             return <Redirect to={"/"}/>
         } else if (!this.state.ledger && !this.state.newPage) {
@@ -97,21 +96,20 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
                             return <Grid item xs={12}><TextField
                                 defaultValue={value.name}
                                 margin="normal"
-                                onChange={(e)=>{this.state.ledger.users[index].name = e.target.value; console.log("toto",this.state)}}
+                                onChange={(e)=>{this.state.ledger.users[index].name = e.target.value;}}
                             /></Grid>
                         }):""}
                         {this.state.usersDraft.map((value, index) => {
                             return <Grid item xs={12}><TextField
                                 defaultValue={value.name}
                                 margin="normal"
-                                onChange={(e)=>{this.state.usersDraft[index].name = e.target.value; console.log("toto",this.state)}}
+                                onChange={(e)=>{this.state.usersDraft[index].name = e.target.value;}}
                             /></Grid>
                         })}
                     </Grid>
-                    <Button variant="contained" onClick={() => {
+                    <Grid item xs={12}><Button variant="contained" onClick={() => {
                         if(this.state.newPage){
                             this.state.ledgerDraft.users = this.state.usersDraft;
-                            console.log(this.state.ledgerDraft)
                             LedgerApi.createLedger(this.state.ledgerDraft);
                         }else {
                             LedgerApi.updateLedger(this.state.idLedger, this.state.ledger, this.state.usersDraft);
@@ -119,7 +117,7 @@ export default class LedgerEdit extends React.Component<RouteComponentProps, Sta
                     }}>
                         <SaveIcon/>
                         {this.state.newPage ? "Create" :"Save"}
-                    </Button>
+                    </Button></Grid>
                     <Button variant="contained" component={props => <Link {...props} to={`/ledgers/${this.state.idLedger}/transactions`}/>} >
                         <ArrowBackIosIcon/>
                     </Button>
