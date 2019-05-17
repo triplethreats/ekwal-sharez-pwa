@@ -74,8 +74,32 @@ function getFromCache(evt) {
     }
 }
 
+function cacheTransaction(cache, ledger, transaction) {
+    cache.put(new Request(`/api/ledgers/${ledger.id}/transactions/${transaction.id}`, {method: "GET"}),
+        new Response(
+            new Blob([JSON.stringify(transaction)],
+                {type: "application/json"}),
+            {status: 200, statusText: "OK"}
+        ));
+} 
+
+function cacheLedger(cache, ledger) {
+    cache.put(new Request(`/api/ledgers/${ledger.id}`, {method: "GET"}),
+        new Response(
+            new Blob([JSON.stringify(ledger)],
+                {type: "application/json"}),
+            {status: 200, statusText: "OK"}
+        ));
+    for (let transaction of ledger.transactions) {
+        cacheTransaction(cache, ledger, transaction);
+    }
+}
+
 function updateCache(ledgers) {
     return caches.open(APICACHE).then(cache => {
+        for (let ledger of ledgers) {
+            cacheLedger(cache, ledger);
+        }
         return cache.put(new Request("/api/ledgers",
             {method: "GET"}
             ),
