@@ -24,6 +24,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
 
     render() {
         return (
+
             <div>
                 <List component="nav">
                     {this.state.ledgers.map((value, index) => {
@@ -37,6 +38,7 @@ export default class LedgerList extends React.Component<RouteComponentProps, Sta
                     Add
                 </Button>
             </div>
+
         );
     }
 }

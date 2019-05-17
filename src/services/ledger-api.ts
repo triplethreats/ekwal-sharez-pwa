@@ -34,7 +34,7 @@ export default class LedgerApi {
             body: JSON.stringify({updatedLedger:updatedLedger,newUsers:newUsers}),
             headers: new Headers()
         };
-        return fetch(`/api/ledgers/${ledgerId}`, fetchData).then()
+        return fetch(`/api/ledgers/${ledgerId}`, fetchData).then();
     }
 
     static createLedger(ledgerDraft:LedgerDraft): Promise<number>{

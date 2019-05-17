@@ -44,11 +44,11 @@ function App(props: Props) {
                 <Header className={classes.header}/>
                 <main className={classes.main}>
                     <Switch>
-                        <Route path={"/ledger/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
-                        <Route path={"/ledger/:id/transactions/new"} component={TransactionEdit} />
-                        <Route path={"/ledger/:id/transactions"} component={LedgerView} />
-                        <Route path={"/ledger/:idLegder"} component={LedgerEdit} />
+                        <Route path={"/ledgers/:id/transactions/new"} component={TransactionEdit} />
                         <Route path={"/ledgers/new"} component={LedgerEdit} />
+                        <Route path={"/ledgers/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
+                        <Route path={"/ledgers/:id/transactions"} component={LedgerView} />
+                        <Route path={"/ledgers/:idLegder/"} component={LedgerEdit} />
                         <Route path={"/ledgers"} component={LedgerList}/>
                         <Route path={"/sign_in"} component={SignIn}/>
                         <Route path={"/sign_up"} component={SignUp}/>
