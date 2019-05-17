@@ -40,7 +40,7 @@ export default class LedgerApi {
     static createLedger(ledgerDraft:LedgerDraft): Promise<number>{
         let fetchData = {
             method: 'POST',
-            body: JSON.stringify({ledgerDraft:ledgerDraft}),
+            body: JSON.stringify(ledgerDraft),
             headers: new Headers()
         };
         return fetch(`/api/ledgers/`, fetchData)
