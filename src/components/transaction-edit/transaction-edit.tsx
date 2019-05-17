@@ -14,10 +14,12 @@ import SaveIcon from '@material-ui/icons/Save';
 import TransactionApi from "../../services/transaction-api";
 import {Link} from "react-router-dom";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
+import {TransactionDraft} from "../../domain/transaction-draft";
 
 
 interface State {
     transaction: Transaction
+    transactionDraft:TransactionDraft
     users: LedgerUser[]
     success: boolean
     idLegder: number
@@ -39,9 +41,20 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         console.log("la2",pathSplit);
         if(pathSplit[pathSplit.length-1]==="new"){
             console.log("la");
-            this.setState({
-                newPage: true,
-                success:true
+            const {idLegder} = this.props.match.params as {idLegder: number};
+            console.log("id",idLegder);
+            LedgerApi.getLedger("", idLegder).then(ledger => {
+                this.setState({
+                    newPage: true,
+                    success:true,
+                    idLegder: idLegder,
+                    users: ledger.users,
+                    transactionDraft:{name:"",payments:[{amount:0,user:ledger.users[0]}],total:0,date:new Date()}
+                });
+            }).catch(reason => {
+                this.setState({
+                    success: false
+                });
             });
         }else {
             const {idLegder, idTransaction} = this.props.match.params as MatchParams;
@@ -63,9 +76,12 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
         }
     }
     handleChange = (event: { target: { value: string; }; }) => {
-        let newTransaction = { ...this.state.transaction };
-        newTransaction.payments[0].user.name = event.target.value;
-        this.setState({ transaction: newTransaction });
+        if(this.state.newPage){
+            this.state.transactionDraft.payments[0].user.name = event.target.value;
+        }else{
+            this.state.transaction.payments[0].user.name = event.target.value;
+        }
+        this.setState(this.state);
     };
     render() {
         console.log("state",this.state);
@@ -79,30 +95,37 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     <Grid item xs={12}><TextField
                         id="transaction-name"
                         label="Name"
-                        value={this.state.newPage ? "" : this.state.transaction.name}
+                        value={this.state.newPage ? this.state.transactionDraft.name : this.state.transaction.name}
                         onChange={e => {
-                            let newTransaction = { ...this.state.transaction };
-                            newTransaction.name = e.target.value;
-                            this.setState({ transaction : newTransaction })}}
+                            if(this.state.newPage){
+                                this.state.transactionDraft.name = e.target.value;
+                            }else {
+                                this.state.transaction.name = e.target.value;
+                            }
+                            this.setState(this.state)}}
                         margin="normal"
                     /></Grid>
                     <Grid item xs={12}><TextField
                         id="transaction-price"
                         label="Price"
                         type="number"
-                        value={this.state.newPage ? "" : this.state.transaction.total}
+                        value={this.state.newPage ? this.state.transactionDraft.total : this.state.transaction.total}
                         onChange={e => {
-                            let newTransaction = { ...this.state.transaction };
-                            newTransaction.total = parseInt(e.target.value);
-                            newTransaction.payments[0].amount = parseInt(e.target.value);
-                            this.setState({ transaction : newTransaction })}}
+                            if(this.state.newPage){
+                                this.state.transactionDraft.total = parseInt(e.target.value);
+                                this.state.transactionDraft.payments[0].amount = parseInt(e.target.value);
+                            }else {
+                                this.state.transaction.total = parseInt(e.target.value);
+                                this.state.transaction.payments[0].amount = parseInt(e.target.value);
+                            }
+                            this.setState(this.state)}}
                         margin="normal"
                     /></Grid>
                     <Grid item xs={12}><TextField
                         id="transaction-date"
                         label="Date"
                         type="date"
-                        defaultValue={this.state.newPage ? new Date().toISOString().split("T")[0] : this.state.transaction.date.toISOString().split('T')[0]}
+                        defaultValue={this.state.newPage ? this.state.transactionDraft.date.toISOString().split("T")[0] : this.state.transaction.date.toISOString().split('T')[0]}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -110,14 +133,14 @@ export default class TransactionEdit extends React.Component<RouteComponentProps
                     <InputLabel htmlFor="age-simple">Payer</InputLabel>
                     <Grid item xs={12}><Select
                         id="transaction-payer"
-                        value={this.state.newPage ? "" : this.state.transaction.payments[0].user.name}
+                        value={this.state.newPage ? this.state.transactionDraft.payments[0].user.name : this.state.transaction.payments[0].user.name}
                         onChange={this.handleChange}
                         inputProps={{
                             name: 'Payer',
                             id: 'payer-simple',
                         }}
                     >
-                        {this.state.newPage ? "" : this.state.users.map(user => (
+                        {this.state.users.map(user => (
                             <MenuItem value={user.name}>
                                 {user.name}
                             </MenuItem>

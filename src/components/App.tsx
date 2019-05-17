@@ -28,7 +28,8 @@ const styles = (theme: Theme) => createStyles({
         height: `calc(100vh - ${headerHeight} - ${footerHeight})`,
         position: "fixed",
         backgroundColor: 'white',
-        width: '100vw'
+        width: '100vw',
+        overflow: 'auto'
     }
 });
 
@@ -44,7 +45,7 @@ function App(props: Props) {
                 <Header className={classes.header}/>
                 <main className={classes.main}>
                     <Switch>
-                        <Route path={"/ledgers/:id/transactions/new"} component={TransactionEdit} />
+                        <Route path={"/ledgers/:idLegder/transactions/new"} component={TransactionEdit} />
                         <Route path={"/ledgers/new"} component={LedgerEdit} />
                         <Route path={"/ledgers/:idLegder/transaction/:idTransaction"} component={TransactionEdit} />
                         <Route path={"/ledgers/:id/transactions"} component={LedgerView} />
